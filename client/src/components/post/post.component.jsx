@@ -7,11 +7,13 @@ import { getPost } from '../../actions/post';
 
 import Spinner from '../layout/spinner.comonent';
 import PostItem from '../posts/post-item.component';
+import CommentForm from './comment-form.component';
+import CommentItem from './comment-item.component';
 
 const Post = ({ getPost, post: { post, loading }, match }) => {
   useEffect(() => {
     getPost(match.params.postId);
-  }, [getPost]);
+  });
   return loading || post == null ? (
     <Spinner />
   ) : (
@@ -20,6 +22,13 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
         Back to Posts
       </Link>
       <PostItem post={post} showActions={false} />
+      <CommentForm postId={post._id} />
+      {/* The post id is passed in as a prop to the comment form */}
+      <div className='comments'>
+        {post.comments.map((comment) => (
+          <CommentItem key={comment._id} comment={comment} postId={post._id} />
+        ))}
+      </div>
     </Fragment>
   );
 };
